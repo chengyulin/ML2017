@@ -1,4 +1,3 @@
-#
 import sys
 from numpy import genfromtxt
 import numpy as np
@@ -41,7 +40,7 @@ for w in range(0,4320,360):#接起來
 	ttmp =[]
 	for x in range(10,360,18):
 		for y in range(data.shape[1]):
-			ttmp.append(data[w+x][y]**2)
+			ttmp.append(data[w+x][y])
 	connect2.append(ttmp)
 
 no =[]
@@ -54,22 +53,14 @@ for w in range(0,4320,360):#接起來
 o3 =[]
 for w in range(0,4320,360):#接起來
 	ttmp =[]
-	for x in range(6,360,18):
-		for y in range(data.shape[1]):
-			ttmp.append(data[w+x][y]**2)
-	o3.append(ttmp)
-
-no2 =[]
-for w in range(0,4320,360):#接起來
-	ttmp =[]
-	for x in range(6,360,18):
+	for x in range(7,360,18):
 		for y in range(data.shape[1]):
 			ttmp.append(data[w+x][y])
-	no2.append(ttmp)
+	o3.append(ttmp)
 
-tra = np.zeros((45,2826))
+tra = np.zeros((36,2826))
 right = np.zeros((1,2826))
-tes = np.zeros((45,2826))
+tes = np.zeros((36,2826))
 tesright = np.zeros((1,2826))
 i = 0
 for w in range(6):
@@ -79,7 +70,6 @@ for w in range(6):
 			tra[z+9][i] = connect2[w][x+z]
 			tra[z+18][i] = no[w][x+z]
 			tra[z+27][i] = o3[w][x+z]
-			tra[z+36][i] = no2[w][x+z]
 		right[0][i] = connect[w][x+9]
 		i+=1
 i = 0
@@ -90,7 +80,6 @@ for w in range(6,12,1):
 			tes[z+9][i] = connect2[w][x+z]
 			tes[z+18][i] = no[w][x+z]
 			tes[z+27][i] = o3[w][x+z]
-			tes[z+36][i] = no2[w][x+z]
 		tesright[0][i] = connect[w][x+9]
 		i+=1
 
@@ -98,16 +87,16 @@ lr = 1
 b_grad = 0
 b = 0
 b_lr = 0.0
-w_lr = [0.0]*45
+w_lr = [0.0]*36
 lam = 1e5
-start = np.zeros((1,45))
-for x in range(45):
+start = np.zeros((1,36))
+for x in range(36):
 	start[0][x]= 1.0
 mini = float(1e13)
-fin = np.zeros((1,45))
+fin = np.zeros((1,36))
 for v in range(int(9e5)):
 	b_grad = 0.0
-	w_grad = [0.0]*45
+	w_grad = [0.0]*36
 	tmp = np.dot(start,tra)
 	delta = right - b - tmp
 	#delta += lam * start * 2
@@ -138,8 +127,7 @@ for w in range(9,test.shape[0],18):
 			count += test[w][z] * start[0][z]
 			count += (test[w+1][z]) * start[0][z+9]
 			count += (test[w][z]**2) * start[0][z+18]
-			count += (test[w-3][z]**2) * start[0][z+27]
-			count += test[w-3][z] * start[0][z+36]
+			count += test[w-2][z] * start[0][z+27]
 	count +=  b
 	#print (count)
 	cnt.append(count)
