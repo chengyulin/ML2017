@@ -1,0 +1,1 @@
+python3 rnntest.py $1 $2
